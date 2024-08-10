@@ -8,6 +8,7 @@ using OrderManagement.Apis.Extensions;
 using OrderManagement.Apis.Middlewares;
 using OrderManagement.Repository.Data;
 using OrderManagement.Repository.Identity;
+using StackExchange.Redis;
 
 namespace OrderManagement.Apis
 {
@@ -27,7 +28,13 @@ namespace OrderManagement.Apis
             );
             builder.Services.AddDbContext<AppIdentityDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"))
-           );
+            );
+            builder.Services.AddSingleton<IConnectionMultiplexer>(options => {
+
+                var connection = builder.Configuration.GetConnectionString("RedisConnection");
+
+                return ConnectionMultiplexer.Connect(connection);
+            });
             builder.Services.AddApplicationServices();
             builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddEndpointsApiExplorer();

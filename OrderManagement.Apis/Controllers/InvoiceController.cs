@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Apis.Errors;
+using OrderManagement.Apis.Helpers;
 using OrderManagement.Core;
 using OrderManagement.Core.Entities;
 
@@ -19,6 +20,7 @@ namespace OrderManagement.Apis.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Invoice>>> GetAllInvoices()
         {
@@ -26,7 +28,7 @@ namespace OrderManagement.Apis.Controllers
             if (invoices == null) NotFound(new ApiResponse(404, "No Invoices Found"));
             return Ok(invoices);
         }
-
+        [Cached(600)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Invoice>> GetInvoiceById(int id)
         {

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using OrderManagement.Apis.DTOs;
+using OrderManagement.Apis.Errors;
+using OrderManagement.Apis.Helpers;
 using OrderManagement.Core;
 using OrderManagement.Core.DTOs;
 using OrderManagement.Core.Entities;
@@ -37,10 +39,11 @@ namespace OrderManagement.Apis.Controllers
            await _unitOfWork.CompleteAsync();
             return Ok(customer);
         }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetAllOrdersForCustomer(int id)
         {
+            var customer = await _unitOfWork.Repository<Customer>().GetAsync(id);
+            if (customer is null) return NotFound(new ApiResponse(404, "Customer not found"));
             var spec = new OrdersForCustomerSpecifications(id);
             var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
             var mappedOrder = _mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders);

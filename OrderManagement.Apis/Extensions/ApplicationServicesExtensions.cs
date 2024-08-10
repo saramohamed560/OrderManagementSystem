@@ -31,6 +31,7 @@ namespace OrderManagement.Apis.Extensions
                 };
             });
 
+            services.AddSingleton(typeof(IResponseCachingService), typeof(ResponseCachingService));
             services.AddScoped(typeof(ITokenService), typeof(TokenService));
             services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             services.AddScoped(typeof(IInvoiceService), typeof(InvoiceService));

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Apis.DTOs;
 using OrderManagement.Apis.Errors;
+using OrderManagement.Apis.Helpers;
 using OrderManagement.Core;
 using OrderManagement.Core.Entities;
 
@@ -57,6 +58,7 @@ namespace OrderManagement.Apis.Controllers
         }
 
         //Get All Products
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetAlProducts()
         {
@@ -64,6 +66,7 @@ namespace OrderManagement.Apis.Controllers
             return Ok(products);
         }
         //Get Specific Product
+        [Cached(600)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {

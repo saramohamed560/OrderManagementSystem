@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Apis.DTOs;
 using OrderManagement.Apis.Errors;
+using OrderManagement.Apis.Helpers;
 using OrderManagement.Core;
 using OrderManagement.Core.DTOs;
 using OrderManagement.Core.Entities;
@@ -39,7 +40,6 @@ namespace OrderManagement.Apis.Controllers
             var mappedOrder = _mapper.Map<OrderToReturnDto>(order);
             return Ok(mappedOrder);
         }
-
         [HttpGet]
         [Authorize(Roles ="Admin" ,AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetAllOrders()
@@ -49,7 +49,6 @@ namespace OrderManagement.Apis.Controllers
             var mappedOrder = _mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders);
             return Ok(mappedOrder);
         }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderToReturnDto>> GetOrderById(int id)
         {
